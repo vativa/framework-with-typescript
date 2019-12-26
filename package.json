@@ -1,0 +1,12 @@
+{
+    "devDependencies": {
+        "typescript": "^3.7.4"
+    },
+    "dependencies": {
+        "axios": "0.19.0"
+    },
+    "scripts": {
+        "start:client": "parcel index.html",
+        "start:server": "json-server -w db.json"
+    }
+}
