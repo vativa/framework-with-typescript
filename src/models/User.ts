@@ -1,18 +1,21 @@
+import axios from 'axios';
+import { Eventing } from './Eventing';
+
 export interface UserProps {
+    id?: number;
     name?: string;
     age?: number;
 }
 
-interface Event {
-    [key: string]: Callback[];
-}
-
-// Type alias
-type Callback = () => void;
+const url: string = 'http://localhost:3000/users';
 
 export class User {
     private _data: UserProps;
-    private _events: Event = {};
+    protected _events: Eventing = new Eventing();
+
+    public get events(): Eventing {
+        return this._events;
+    }
 
     public constructor(data: UserProps) {
         this._data = data;
@@ -27,25 +30,26 @@ export class User {
         return this;
     }
 
-    public on(eventName: string, callback: Callback): void {
-        const handlers = this._events[eventName] || [];
-        this._events[eventName] = [...handlers, callback];
+    public fetch(): Promise<UserProps> {
+        return axios(`${url}/${this.get('id')}`).then(({ data }) => {
+            // console.log(data);
+            this.set(data);
+            return data;
+        }).catch(console.error);
     }
 
-    public trigger(eventName: string): User {
-        const handlers = this._events[eventName];
-        if (!handlers || handlers.length === 0) {
-            return this;
+    public save(): Promise<UserProps> {
+        const id = this.get('id');
+        if (id) {
+            return axios.put(`${url}/${id}`, this._data).then(({ data }) => {
+                // console.log(data);
+                return data;
+            }).catch(console.error);
+        } else {
+            return axios.post(url, this._data).then(({ data }) => {
+                // console.log(data);
+                return data;
+            }).catch(console.error);
         }
-        handlers.forEach(callback => {
-            callback();
-        })
-        return this;
     }
-
-    public fetch(): Promise<string[]> {
-        return new Promise(() => {}, () => {});
-    }
-
-    // public save(): Promise;
 }
