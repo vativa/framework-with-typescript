@@ -23,28 +23,17 @@ interface Eventable {
 }
 
 export abstract class Model<T extends HasId> {
-    private _attributes: Modelable<T>;
-    private _events: Eventable;
-    private _sync: Syncable<T>;
 
-    protected constructor(attributes: Modelable<T>, eventing: Eventable, apisync: Syncable<T>) {
-        this._attributes = attributes;
-        this._events = eventing;
-        this._sync = apisync;
-    }
+    protected constructor(
+        private _attributes: Modelable<T>,
+        private _events: Eventable,
+        private _sync: Syncable<T>
+    ) {}
 
     // 1st group of delegates
-    public get on() {
-        return this._events.on;
-    }
-
-    public get trigger() {
-        return this._events.trigger;
-    }
-
-    public get get() {
-        return this._attributes.get;
-    }
+    on = this._events.on;
+    trigger = this._events.trigger;
+    get = this._attributes.get;
 
     // 2nd group of delegates
     public set(props: T): void {
