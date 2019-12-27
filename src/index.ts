@@ -1,35 +1,26 @@
 import { User } from './models/User';
 
-const user = new User({ id: 1 });
-user.events.on('change', () => {
-    console.log('change triggered');
+// const user = new User({ id: 1, name: 'Joseph Bonano', age: 78 });
+const user = User.factory({ id: 1 });
+
+// Listen for events
+user.on('fetch', () => {
+    console.log('User has been successfully fetched.');
+    console.log(user);
+});
+user.on('change', () => {
+    console.log('User has changed.');
+    console.log(user);
 })
-user.events.trigger('change');
+user.on('save', () => {
+    console.log('User has been saved.');
+    console.log(user);
+})
+user.on('error', () => {
+    console.log('Ups! Something went wrong...');
+})
 
-// user.set({ name: 'Tim Range' });
-// user.set({ age: 30 });
-// user.save().then();
-// console.log(user);
-// const newUser = new User({ name: 'Cathleen Moller', age: 24 });
-// newUser.save().then();
-// console.log(newUser);
-
-// console.log(`${user.get('name')} ${user.get('age')}`);
-// user.set({ name: 'Tim Range', age: 50 });
-// console.log(`${user.get('name')} ${user.get('age')}`);
-// user.set({ age: 30 });
-// console.log(`${user.get('name')} ${user.get('age')}`);
-
-// Test events
-// user.on('change', () => {
-//     console.log('>>> trigger the change event');
-// });
-// user.on('click', () => {
-//     console.log('>>> trigger click#1 event');
-// });
-// user.on('click', () => {
-//     console.log('>>> trigger click#2 event');
-// });
-// user.trigger('click');
-// user.trigger('change');
-// user.trigger('unknown');
+// Test framework API
+user.fetch();
+user.set({ name: "Jeremy Stones", age: 34 });
+user.save();
