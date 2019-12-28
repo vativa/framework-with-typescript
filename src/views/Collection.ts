@@ -1,11 +1,10 @@
-import { Collection } from '../models/Collection';
-import { Model } from '../models/Model';
+import { Collection as ModelCollection } from '../models/Collection';
 
-export abstract class CollectionView<T, S> {
+export abstract class Collection<T, S> {
 
-    public constructor(
+    protected constructor(
         protected _parent: HTMLElement,
-        protected _collection: Collection<T, S>
+        protected _collection: ModelCollection<T, S>
     ) {}
 
     protected abstract renderItem(model: T, parentItem: HTMLElement): void;
